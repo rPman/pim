@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2014 Michael Pozhidaev <msp@altlinux.org>
+   Copyright 2012-2015 Michael Pozhidaev <msp@altlinux.org>
 
    This file is part of the Luwrain.
 
@@ -14,11 +14,11 @@
    General Public License for more details.
 */
 
-package org.luwrain.pim;
+package org.luwrain.extensions.pim;
 
-public class ValidityException extends Exception
+public class RegistryUpdateException extends Exception
 {
-    public ValidityException(String message)
+    public RegistryUpdateException(String message)
     {
 	super(message);
     }

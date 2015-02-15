@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2014 Michael Pozhidaev <msp@altlinux.org>
+   Copyright 2012-2015 Michael Pozhidaev <msp@altlinux.org>
 
    This file is part of the Luwrain.
 
@@ -14,13 +14,12 @@
    General Public License for more details.
 */
 
-package org.luwrain.pim;
+package org.luwrain.extensions.pim;
 
-public class NewsGroup
+public class ValidityException extends Exception
 {
-    public String name ="";
-    public String[] urls = new String[0];
-    public String mediaContentType = "";
-    public int orderIndex = 0;
-    public int expireAfterDays = 30;
+    public ValidityException(String message)
+    {
+	super(message != null?message:"");
+    }
 }

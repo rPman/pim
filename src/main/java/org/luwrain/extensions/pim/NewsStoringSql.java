@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2014 Michael Pozhidaev <msp@altlinux.org>
+   Copyright 2012-2015 Michael Pozhidaev <msp@altlinux.org>
 
    This file is part of the Luwrain.
 
@@ -14,12 +14,12 @@
    General Public License for more details.
 */
 
-package org.luwrain.pim;
+package org.luwrain.extensions.pim;
 
 import java.sql.*;
 import java.util.*;
-import org.luwrain.core.Log;
-import org.luwrain.core.registry.Registry;
+
+import org.luwrain.core.Registry;
 
 class NewsStoringSql extends NewsStoringRegistry
 {
@@ -29,9 +29,11 @@ class NewsStoringSql extends NewsStoringRegistry
     {
 	super(registry);
 	this.con = con;
+	if (con == null)
+	    throw new NullPointerException("con may not be null");
     }
 
-    public void saveNewsArticle(StoredNewsGroup newsGroup, NewsArticle article) throws SQLException
+    @Override public void saveNewsArticle(StoredNewsGroup newsGroup, NewsArticle article) throws SQLException
     {
 	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)newsGroup;
 	PreparedStatement st = con.prepareStatement("INSERT INTO news_article (news_group_id,state,source_url,source_title,uri,title,ext_title,url,descr,author,categories,published_date,updated_date,content) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
@@ -52,7 +54,7 @@ class NewsStoringSql extends NewsStoringRegistry
 	st.executeUpdate();
     }
 
-    public     StoredNewsArticle[] loadNewsArticlesInGroup(StoredNewsGroup newsGroup) throws SQLException
+    @Override public     StoredNewsArticle[] loadNewsArticlesOfGroup(StoredNewsGroup newsGroup) throws SQLException
     {
 	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)newsGroup;
 	PreparedStatement st = con.prepareStatement("SELECT id,news_group_id,state,source_url,source_title,uri,title,ext_title,url,descr,author,categories,published_date,updated_date,content FROM news_article WHERE news_group_id = ?;");
@@ -82,7 +84,7 @@ class NewsStoringSql extends NewsStoringRegistry
 	return articles.toArray(new StoredNewsArticle[articles.size()]);
     }
 
-    public     StoredNewsArticle[] loadNewsArticlesInGroupWithoutRead(StoredNewsGroup newsGroup) throws SQLException
+    @Override public     StoredNewsArticle[] loadNewsArticlesInGroupWithoutRead(StoredNewsGroup newsGroup) throws SQLException
     {
 	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)newsGroup;
 	PreparedStatement st = con.prepareStatement("SELECT id,news_group_id,state,source_url,source_title,uri,title,ext_title,url,descr,author,categories,published_date,updated_date,content FROM news_article WHERE news_group_id = ? AND state <> 1;");
@@ -112,7 +114,7 @@ class NewsStoringSql extends NewsStoringRegistry
 	return articles.toArray(new StoredNewsArticle[articles.size()]);
     }
 
-    public int countArticlesByUriInGroup(StoredNewsGroup newsGroup, String uri) throws SQLException
+    @Override public int countArticlesByUriInGroup(StoredNewsGroup newsGroup, String uri) throws SQLException
     {
 	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)newsGroup;
 	PreparedStatement st = con.prepareStatement("SELECT count(*) FROM news_article WHERE news_group_id = ? AND uri = ?;");
@@ -124,25 +126,19 @@ class NewsStoringSql extends NewsStoringRegistry
 	return rs.getInt(1);
     }
 
-    public int countNewArticleInGroup(StoredNewsGroup group) throws Exception
+    @Override public int countNewArticleInGroup(StoredNewsGroup group) throws Exception
     {
 	if (group == null)
 	    return 0;
 	if (!(group instanceof StoredNewsGroupRegistry))
-	{
-	    Log.warning("pim", "provided object to count new articles  for is not an instance of StoredNewsGroupRegistry");
 	    return 0;
-	}
 	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)group;
 	PreparedStatement st = con.prepareStatement("SELECT count(*) FROM news_article WHERE news_group_id=? AND state=?;");
 	st.setLong(1, g.id);
 	st.setLong(2, NewsArticle.NEW);
 	ResultSet rs = st.executeQuery();
 	if (!rs.next())
-	{
-	    Log.warning("pim", "empty result set on attempt to count unread news articles in the group");
 	    return 0;
-	}
 	return rs.getInt(1);
     }
 }

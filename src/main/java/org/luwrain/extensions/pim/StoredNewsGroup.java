@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2014 Michael Pozhidaev <msp@altlinux.org>
+   Copyright 2012-2015 Michael Pozhidaev <msp@altlinux.org>
 
    This file is part of the Luwrain.
 
@@ -14,12 +14,18 @@
    General Public License for more details.
 */
 
-package org.luwrain.pim;
+package org.luwrain.extensions.pim;
 
-public class RegistryUpdateException extends Exception
+public interface StoredNewsGroup
 {
-    public RegistryUpdateException(String message)
-    {
-	super(message);
-    }
+    String getName();
+    void setName(String name) throws Exception;
+    String[] getUrls();
+    void setUrls(String[] urls) throws Exception;
+    String getMediaContentType();
+    void setMediaContentType(String value) throws Exception;
+    int getOrderIndex();
+    void setOrderIndex(int index) throws Exception;
+    int getExpireAfterDays();
+    void setExpireAfterDays(int count) throws Exception;
 }

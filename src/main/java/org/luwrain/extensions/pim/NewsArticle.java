@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2014 Michael Pozhidaev <msp@altlinux.org>
+   Copyright 2012-2015 Michael Pozhidaev <msp@altlinux.org>
 
    This file is part of the Luwrain.
 
@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.pim;
+package org.luwrain.extensions.pim;
 
 import java.util.*;
 
@@ -24,16 +24,16 @@ public class NewsArticle
     public static final int READ = 1;
     public static final int MARKED = 2;
 
-    public String sourceUrl = new String();
-    public String sourceTitle = new String();
-    public String uri = new String();
-    public String title = new String();
-    public String extTitle = new String();
-    public String url = new String();
-    public String descr = new String();
-    public String author = new String();
-    public String categories = new String();
+    public String sourceUrl = "";
+    public String sourceTitle = "";
+    public String uri = "";
+    public String title = "";
+    public String extTitle = "";
+    public String url = "";
+    public String descr = "";
+    public String author = "";
+    public String categories = "";
     public Date publishedDate = new Date();
     public Date updatedDate = new Date();
-    public String content = new String();
+    public String content = "";
 }

@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2014 Michael Pozhidaev <msp@altlinux.org>
+   Copyright 2012-2015 Michael Pozhidaev <msp@altlinux.org>
 
    This file is part of the Luwrain.
 
@@ -14,13 +14,13 @@
    General Public License for more details.
 */
 
-package org.luwrain.pim;
+package org.luwrain.extensions.pim;
 
 public interface NewsStoring
 {
     StoredNewsGroup[] loadNewsGroups() throws Exception;
     void saveNewsArticle(StoredNewsGroup newsGroup, NewsArticle article) throws Exception;
-    StoredNewsArticle[] loadNewsArticlesInGroup(StoredNewsGroup newsGroup) throws Exception;
+    StoredNewsArticle[] loadNewsArticlesOfGroup(StoredNewsGroup newsGroup) throws Exception;
     StoredNewsArticle[] loadNewsArticlesInGroupWithoutRead(StoredNewsGroup newsGroup) throws Exception;
     int countArticlesByUriInGroup(StoredNewsGroup newsGroup, String uri) throws Exception;
     int countNewArticleInGroup(StoredNewsGroup group) throws Exception;
