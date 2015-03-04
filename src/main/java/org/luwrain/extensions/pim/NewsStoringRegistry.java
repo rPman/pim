@@ -47,6 +47,7 @@ abstract class NewsStoringRegistry implements NewsStoring
 	    if (g != null)
 		groups.add(g);
 	}
+	System.out.println("groups " + groups.size());
 	return groups.toArray(new StoredNewsGroup[groups.size()]);
     }
 
@@ -71,10 +72,10 @@ abstract class NewsStoringRegistry implements NewsStoring
 	g.name = check.stringNotEmpty(path + "/name", "");
 	if (g.name.isEmpty())
 	    return null;
-	g.expireAfterDays = check.intPositive(path + "expire-days", -1);
+	g.expireAfterDays = check.intPositive(path + "/expire-days", -1);
 	if (g.expireAfterDays < 0)
 	    g.expireAfterDays = 0;
-	g.orderIndex = check.intPositive(path + "order-index", -1);
+	g.orderIndex = check.intPositive(path + "/order-index", -1);
 	if (g.orderIndex < 0)
 	    g.orderIndex = 0;
 	g.mediaContentType = check.stringAny(path + "media-content-type", "");

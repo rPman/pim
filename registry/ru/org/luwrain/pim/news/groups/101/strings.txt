@@ -1,0 +1,2 @@
+"name" = "Ферра.ру"
+"url1" = "http://www.ferra.ru/export/news-rss.xml"

@@ -38,6 +38,10 @@ public class Extension implements org.luwrain.core.Extension
 	if (registry == null)
 	    throw new NullPointerException("registry may not be null");
 	this.registry = registry;
+	String res = initDefaultNewsCon();
+	if (res != null)
+	    return res;
+	newsStoring = new NewsStoringSql(registry, newsJdbcCon);
 	return null;
     }
 
@@ -63,7 +67,22 @@ public class Extension implements org.luwrain.core.Extension
 
     @Override public SharedObject[] getSharedObjects()
     {
-	return new SharedObject[0];
+	if (newsStoring == null)
+	    return new SharedObject[0];
+	SharedObject[] res = new SharedObject[1];
+	final NewsStoring n = newsStoring;
+	res[0] = new SharedObject(){
+				    private NewsStoring newsStoring = n;
+				    @Override public String getName()
+				    {
+					return "luwrain.pim.news";
+				    }
+				    @Override public Object getSharedObject()
+				    {
+					return newsStoring;
+				    }
+				    };
+	return res;
     }
 
     @Override public void i18nExtension(I18nExtension i18nExt)
@@ -97,5 +116,21 @@ public class Extension implements org.luwrain.core.Extension
 	    return "creating news JDBC connection:" + e.getMessage();
 	}
 	return null;
+    }
+
+    @Override public void close()
+    {
+	if (newsJdbcCon != null)
+	{
+	    try {
+		Statement st = newsJdbcCon.createStatement();
+		st.executeUpdate("shutdown");
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	    newsJdbcCon = null;
+	}
     }
 }

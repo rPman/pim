@@ -1,0 +1,2 @@
+"name" = "RT"
+"url1" = "http://rt.com/rss/"

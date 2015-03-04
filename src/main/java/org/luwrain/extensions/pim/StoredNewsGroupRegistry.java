@@ -18,7 +18,7 @@ package org.luwrain.extensions.pim;
 
 import org.luwrain.core.Registry;
 
-class StoredNewsGroupRegistry implements StoredNewsGroup
+class StoredNewsGroupRegistry implements StoredNewsGroup, Comparable
 {
     private Registry registry;
     public int id = 0;
@@ -119,5 +119,17 @@ class StoredNewsGroupRegistry implements StoredNewsGroup
     {
 	if (id < 0)
 	    throw new ValidityException("trying to change the state of a news group which is not associated with a storage");
+    }
+
+    @Override public int compareTo(Object o)
+    {
+	if (o == null || !(o instanceof StoredNewsGroupRegistry))
+	    return 0;
+	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)o;
+	if (orderIndex < g.orderIndex)
+	    return -1;
+	if (orderIndex > g.orderIndex)
+	    return 1;
+	return 0;
     }
 }

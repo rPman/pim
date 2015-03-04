@@ -1,0 +1,3 @@
+"name" = "Новости Google"
+"url1" = "http://news.google.com/news/section?pz=1&js=0&cf=all&ned=ru_ru&topic=w&output=rss"
+"url2" = "http://news.google.com/news/section?pz=1&js=0&cf=all&ned=ru_ru&topic=n&output=rss"

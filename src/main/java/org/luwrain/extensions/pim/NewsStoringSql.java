@@ -35,6 +35,10 @@ class NewsStoringSql extends NewsStoringRegistry
 
     @Override public void saveNewsArticle(StoredNewsGroup newsGroup, NewsArticle article) throws SQLException
     {
+	if (newsGroup == null)
+	    throw new NullPointerException("newsGrroup may not be null");
+	if (!(newsGroup instanceof StoredNewsGroupRegistry))
+	    throw new IllegalArgumentException("newsGroup is not an instance of StoredNewsGroupRegistry");
 	StoredNewsGroupRegistry g = (StoredNewsGroupRegistry)newsGroup;
 	PreparedStatement st = con.prepareStatement("INSERT INTO news_article (news_group_id,state,source_url,source_title,uri,title,ext_title,url,descr,author,categories,published_date,updated_date,content) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 	st.setLong(1, g.id);
@@ -76,8 +80,8 @@ class NewsStoringSql extends NewsStoringRegistry
 	    a.descr = rs.getString(10).trim();
 	    a.author = rs.getString(11).trim();
 	    a.categories = rs.getString(12).trim();
-	    a.publishedDate = rs.getDate(13);
-	    a.updatedDate = rs.getDate(14);
+	    a.publishedDate = new java.util.Date(rs.getDate(13).getTime() + rs.getTime(13).getTime());
+	    a.updatedDate = new java.util.Date(rs.getDate(14).getTime() + rs.getTime(14).getTime());
 	    a.content = rs.getString(15).trim();
 	    articles.add(a);
 	}
@@ -106,8 +110,10 @@ class NewsStoringSql extends NewsStoringRegistry
 	    a.descr = rs.getString(10).trim();
 	    a.author = rs.getString(11).trim();
 	    a.categories = rs.getString(12).trim();
-	    a.publishedDate = rs.getDate(13);
-	    a.updatedDate = rs.getDate(14);
+	    //	    a.publishedDate = rs.getDate(13);
+	    //	    a.updatedDate = rs.getDate(14);
+	    a.publishedDate = new java.util.Date(rs.getDate(13).getTime() + rs.getTime(13).getTime());
+	    a.updatedDate = new java.util.Date(rs.getDate(14).getTime() + rs.getTime(14).getTime());
 	    a.content = rs.getString(15).trim();
 	    articles.add(a);
 	}
@@ -140,5 +146,67 @@ class NewsStoringSql extends NewsStoringRegistry
 	if (!rs.next())
 	    return 0;
 	return rs.getInt(1);
+    }
+
+    @Override public int[] countNewArticlesInGroups(StoredNewsGroup[] groups) throws Exception
+    {
+	if (groups == null)
+	    throw new NullPointerException("groups may not be null");
+	StoredNewsGroupRegistry[] g = new StoredNewsGroupRegistry[groups.length];
+	for(int i =- 0;i < groups.length;++i)
+	{
+	    if (groups[i] == null)
+		throw new NullPointerException("groups[" + i + "] may not be null");
+	    if (!(groups[i] instanceof StoredNewsGroupRegistry))
+		throw new IllegalArgumentException("groups[" + i + "] must be an instance of StoredNewsGroupRegistry");
+	    g[i] = (StoredNewsGroupRegistry)groups[i];
+	}
+	int[] res = new int[g.length];
+	for(int i = 0;i < res.length;++i)
+	    res[i] = 0;
+	Statement st = con.createStatement();
+	ResultSet rs = st.executeQuery("select news_group_id,count(*) from news_article where state=0 group by news_group_id;");
+	while (rs.next())
+	{
+	    final long id = rs.getLong(1);
+	    final int count = rs.getInt(2);
+	    int k = 0;
+	    while (k < g.length && g[k].id != id)
+		++k;
+	    if (k < g.length)
+		res[k] = count;
+	}
+	return res;
+    }
+
+    @Override public int[] countMarkedArticlesInGroups(StoredNewsGroup[] groups) throws Exception
+    {
+	if (groups == null)
+	    throw new NullPointerException("groups may not be null");
+	StoredNewsGroupRegistry[] g = new StoredNewsGroupRegistry[groups.length];
+	for(int i =- 0;i < groups.length;++i)
+	{
+	    if (groups[i] == null)
+		throw new NullPointerException("groups[" + i + "] may not be null");
+	    if (!(groups[i] instanceof StoredNewsGroupRegistry))
+		throw new IllegalArgumentException("groups[" + i + "] must be an instance of StoredNewsGroupRegistry");
+	    g[i] = (StoredNewsGroupRegistry)groups[i];
+	}
+	int[] res = new int[g.length];
+	for(int i = 0;i < res.length;++i)
+	    res[i] = 0;
+	Statement st = con.createStatement();
+	ResultSet rs = st.executeQuery("select news_group_id,count(*) from news_article where state=2 group by news_group_id;");
+	while (rs.next())
+	{
+	    final long id = rs.getLong(1);
+	    final int count = rs.getInt(2);
+	    int k = 0;
+	    while (k < g.length && g[k].id != id)
+		++k;
+	    if (k < g.length)
+		res[k] = count;
+	}
+	return res;
     }
 }

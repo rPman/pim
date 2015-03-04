@@ -1,0 +1,2 @@
+"name" = "Слон.ру"
+"url1" = "http://slon.ru/rss/xml/all.xml"

@@ -1,0 +1,2 @@
+"name" = "Трэвел.ру"
+"url1" = "http://informer.travel.ru/inc/side/news.rss"

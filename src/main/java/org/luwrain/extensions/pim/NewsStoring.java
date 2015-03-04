@@ -24,4 +24,6 @@ public interface NewsStoring
     StoredNewsArticle[] loadNewsArticlesInGroupWithoutRead(StoredNewsGroup newsGroup) throws Exception;
     int countArticlesByUriInGroup(StoredNewsGroup newsGroup, String uri) throws Exception;
     int countNewArticleInGroup(StoredNewsGroup group) throws Exception;
+    int[] countNewArticlesInGroups(StoredNewsGroup[] groups) throws Exception;
+    int[] countMarkedArticlesInGroups(StoredNewsGroup[] groups) throws Exception;
 }

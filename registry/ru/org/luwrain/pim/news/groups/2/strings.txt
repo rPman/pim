@@ -1,0 +1,2 @@
+"name" = "RT (русский)"
+"url1" = "http://russian.rt.com/rss/"

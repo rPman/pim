@@ -1,0 +1,2 @@
+"name" = "Форбс.ру"
+"url1" = "http://rss.forbes.ru/c/32589/f/492646/index.rss"

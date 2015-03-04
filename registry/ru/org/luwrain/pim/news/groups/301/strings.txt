@@ -1,0 +1,2 @@
+"name" = "Авиа.ру"
+"url1" = "http://www.aviaru.net/rss/news/"

@@ -21,7 +21,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-class StoredNewsArticleSql implements StoredNewsArticle
+class StoredNewsArticleSql implements StoredNewsArticle, Comparable
 {
     Connection con;
     public long id = 0;
@@ -37,8 +37,8 @@ class StoredNewsArticleSql implements StoredNewsArticle
     public String descr = "";
     public String author = "";
     public String categories = "";
-    public Date publishedDate = new Date();
-    public Date updatedDate = new Date();
+    public java.util.Date publishedDate = new java.util.Date();
+    public java.util.Date updatedDate = new java.util.Date();
     public String content = "";
 
     public StoredNewsArticleSql(Connection con)
@@ -180,5 +180,23 @@ class StoredNewsArticleSql implements StoredNewsArticle
     @Override public   void setContent(String content) throws SQLException
     {
 	//FIXME:
+    }
+
+    @Override public int compareTo(Object o)
+    {
+	if (o == null || !(o instanceof StoredNewsArticleSql))
+	    return 0;
+	StoredNewsArticleSql article = (StoredNewsArticleSql)o;
+	if (state != article.state)
+	{
+	    if (state > article.state)
+		return -1;
+	    if (state < article.state)
+		return 1;
+	    return 0;
+	}
+	if (publishedDate == null || article.publishedDate == null)
+	    return 0;
+return -1 * publishedDate.compareTo(article.publishedDate);
     }
 }

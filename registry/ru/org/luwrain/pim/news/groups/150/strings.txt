@@ -1,0 +1,2 @@
+"name" = "TechCrunch"
+"url1" = "http://feeds.feedburner.com/TechCrunch/"

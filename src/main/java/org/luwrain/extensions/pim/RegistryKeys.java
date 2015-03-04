@@ -53,7 +53,7 @@ class RegistryKeys
 
     public String newsUrl()
     {
-	return getProperty("news.turl");
+	return getProperty("news.url");
     }
 
     public String newsLogin()
