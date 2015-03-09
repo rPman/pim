@@ -24,13 +24,29 @@ import org.luwrain.core.Registry;
 class NewsStoringSql extends NewsStoringRegistry
 {
     private Connection con;
+    private String url = "";
+    private String login = "";
+    private String passwd = "";
 
-    public NewsStoringSql(Registry registry, Connection con)
+    public NewsStoringSql(Registry registry,
+			  Connection con,
+			  String url,
+			  String login,
+			  String passwd)
     {
 	super(registry);
 	this.con = con;
+	this.url = url;
+	this.login = login;
+	this.passwd = passwd;
 	if (con == null)
 	    throw new NullPointerException("con may not be null");
+	if (url == null)
+	    throw new NullPointerException("url may not be null");
+	if (login == null)
+	    throw new NullPointerException("login may not be null");
+	if (passwd == null)
+	    throw new NullPointerException("passwd may not be null");
     }
 
     @Override public void saveNewsArticle(StoredNewsGroup newsGroup, NewsArticle article) throws SQLException
@@ -80,8 +96,8 @@ class NewsStoringSql extends NewsStoringRegistry
 	    a.descr = rs.getString(10).trim();
 	    a.author = rs.getString(11).trim();
 	    a.categories = rs.getString(12).trim();
-	    a.publishedDate = new java.util.Date(rs.getDate(13).getTime() + rs.getTime(13).getTime());
-	    a.updatedDate = new java.util.Date(rs.getDate(14).getTime() + rs.getTime(14).getTime());
+	    a.publishedDate = new java.util.Date(rs.getTimestamp(13).getTime());
+	    a.updatedDate = new java.util.Date(rs.getTimestamp(14).getTime());
 	    a.content = rs.getString(15).trim();
 	    articles.add(a);
 	}
@@ -110,10 +126,8 @@ class NewsStoringSql extends NewsStoringRegistry
 	    a.descr = rs.getString(10).trim();
 	    a.author = rs.getString(11).trim();
 	    a.categories = rs.getString(12).trim();
-	    //	    a.publishedDate = rs.getDate(13);
-	    //	    a.updatedDate = rs.getDate(14);
-	    a.publishedDate = new java.util.Date(rs.getDate(13).getTime() + rs.getTime(13).getTime());
-	    a.updatedDate = new java.util.Date(rs.getDate(14).getTime() + rs.getTime(14).getTime());
+	    a.publishedDate = new java.util.Date(rs.getTimestamp(13).getTime());
+	    a.updatedDate = new java.util.Date(rs.getTimestamp(14).getTime());
 	    a.content = rs.getString(15).trim();
 	    articles.add(a);
 	}
@@ -208,5 +222,19 @@ class NewsStoringSql extends NewsStoringRegistry
 		res[k] = count;
 	}
 	return res;
+    }
+
+    @Override public Object clone()
+    {
+	Connection newCon = null;
+	try {
+	    newCon = DriverManager.getConnection (url, login, passwd);
+	}
+	catch (SQLException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	return new NewsStoringSql(registry, newCon, url, login, passwd);
     }
 }

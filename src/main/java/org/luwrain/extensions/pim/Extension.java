@@ -32,6 +32,9 @@ public class Extension implements org.luwrain.core.Extension
     private NewsStoring newsStoring;
     private Registry registry;
     private Connection newsJdbcCon;
+    private String newsUrl = "";
+    private String newsLogin = "";
+    private String newsPasswd = "";
 
     @Override public String init(String[] cmdLIne, Registry registry)
     {
@@ -41,7 +44,7 @@ public class Extension implements org.luwrain.core.Extension
 	String res = initDefaultNewsCon();
 	if (res != null)
 	    return res;
-	newsStoring = new NewsStoringSql(registry, newsJdbcCon);
+	newsStoring = new NewsStoringSql(registry, newsJdbcCon, newsUrl, newsLogin, newsPasswd);
 	return null;
     }
 
@@ -101,14 +104,14 @@ public class Extension implements org.luwrain.core.Extension
 	final String driver = check.stringNotEmpty(keys.newsDriver(), "");
 	if (driver.isEmpty())
 	    return "no proper value " + keys.newsDriver();
-	final String url = check.stringNotEmpty(keys.newsUrl(), "");
-	if (url.isEmpty())
+	newsUrl = check.stringNotEmpty(keys.newsUrl(), "");
+	if (newsUrl.isEmpty())
 	    return "no proper value " + keys.newsUrl();
-	final String login = check.stringAny(keys.newsLogin(), "");
-	final String passwd = check.stringAny(keys.newsPasswd(), "");
+	newsLogin = check.stringAny(keys.newsLogin(), "");
+	newsPasswd = check.stringAny(keys.newsPasswd(), "");
 	try {
 	    Class.forName (driver).newInstance ();
-	    newsJdbcCon = DriverManager.getConnection (url, login, passwd);
+	    newsJdbcCon = DriverManager.getConnection (newsUrl, newsLogin, newsPasswd);
 	}
 	catch(Exception e)
 	{

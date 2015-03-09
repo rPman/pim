@@ -23,7 +23,7 @@ import org.luwrain.util .RegistryAutoCheck;
 
 abstract class NewsStoringRegistry implements NewsStoring
 {
-    private Registry registry;
+    protected Registry registry;
 
     public NewsStoringRegistry(Registry registry)
     {
@@ -95,5 +95,10 @@ abstract class NewsStoringRegistry implements NewsStoring
 	}
 	g.urls = urls.toArray(new String[urls.size()]);
 	return g;
+    }
+
+    @Override public Object clone()
+    {
+	return null;
     }
 }

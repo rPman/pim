@@ -197,6 +197,6 @@ class StoredNewsArticleSql implements StoredNewsArticle, Comparable
 	}
 	if (publishedDate == null || article.publishedDate == null)
 	    return 0;
-return -1 * publishedDate.compareTo(article.publishedDate);
+	return -1 * publishedDate.compareTo(article.publishedDate);
     }
 }

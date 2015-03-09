@@ -16,7 +16,7 @@
 
 package org.luwrain.extensions.pim;
 
-public interface NewsStoring
+public interface NewsStoring extends Cloneable
 {
     StoredNewsGroup[] loadNewsGroups() throws Exception;
     void saveNewsArticle(StoredNewsGroup newsGroup, NewsArticle article) throws Exception;
@@ -26,4 +26,5 @@ public interface NewsStoring
     int countNewArticleInGroup(StoredNewsGroup group) throws Exception;
     int[] countNewArticlesInGroups(StoredNewsGroup[] groups) throws Exception;
     int[] countMarkedArticlesInGroups(StoredNewsGroup[] groups) throws Exception;
+    Object clone();
 }
