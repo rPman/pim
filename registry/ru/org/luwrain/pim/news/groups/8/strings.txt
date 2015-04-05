@@ -1,0 +1,4 @@
+"name" = "РБК"
+"url1" = "http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/politics.rss"
+"url2" = "http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/economics.rss"
+"url3" = "http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/society.rss"
