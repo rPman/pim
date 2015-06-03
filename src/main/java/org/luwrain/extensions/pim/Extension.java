@@ -19,15 +19,16 @@ package org.luwrain.extensions.pim;
 import java.sql.*;
 
 import org.luwrain.core.Registry;
-import org.luwrain.core.Shortcut;
-import org.luwrain.core.Command;
-import org.luwrain.core.CommandEnvironment;
-import org.luwrain.core.I18nExtension;
-import org.luwrain.core.Worker;
+import org.luwrain.core.Luwrain;
+//import org.luwrain.core.Shortcut;
+//import org.luwrain.core.Command;
+//import org.luwrain.core.CommandEnvironment;
+//import org.luwrain.core.I18nExtension;
+//import org.luwrain.core.Worker;
 import org.luwrain.core.SharedObject;
 import org.luwrain.util.RegistryAutoCheck;
 
-public class Extension implements org.luwrain.core.Extension
+public class Extension extends org.luwrain.core.extensions.EmptyExtension
 {
     private NewsStoring newsStoring;
     private Registry registry;
@@ -36,11 +37,9 @@ public class Extension implements org.luwrain.core.Extension
     private String newsLogin = "";
     private String newsPasswd = "";
 
-    @Override public String init(String[] cmdLIne, Registry registry)
+    @Override public String init(Luwrain luwrain)
     {
-	if (registry == null)
-	    throw new NullPointerException("registry may not be null");
-	this.registry = registry;
+	this.registry = luwrain.getRegistry();
 	String res = initDefaultNewsCon();
 	if (res != null)
 	    return res;
@@ -48,27 +47,7 @@ public class Extension implements org.luwrain.core.Extension
 	return null;
     }
 
-    @Override public Command[] getCommands(CommandEnvironment env)
-    {
-	return new Command[0];
-    }
-
-    @Override public Shortcut[] getShortcuts()
-    {
-	return new Shortcut[0];
-    }
-
-    @Override public org.luwrain.mainmenu.Item[] getMainMenuItems(CommandEnvironment env)
-    {
-	return new org.luwrain.mainmenu.Item[0];
-    }
-
-    @Override public Worker[] getWorkers()
-    {
-	return new Worker[0];
-    }
-
-    @Override public SharedObject[] getSharedObjects()
+    @Override public SharedObject[] getSharedObjects(Luwrain luwrain)
     {
 	if (newsStoring == null)
 	    return new SharedObject[0];
@@ -86,10 +65,6 @@ public class Extension implements org.luwrain.core.Extension
 				    }
 				    };
 	return res;
-    }
-
-    @Override public void i18nExtension(I18nExtension i18nExt)
-    {
     }
 
     private String initDefaultNewsCon()
