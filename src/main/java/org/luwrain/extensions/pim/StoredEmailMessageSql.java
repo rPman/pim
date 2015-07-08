@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Flags.Flag;
 import javax.mail.Message;
@@ -148,16 +150,35 @@ class StoredEmailMessageSql extends EmailMessage implements StoredEmailMessage, 
 			message.setRecipients(RecipientType.BCC, addr_bcc);
 		}
 		if(this.sentDate!=null) message.setSentDate(this.sentDate);
-		if(this.mimeContentType==null)
-		{ // simple text email body
-			message.setText(this.baseContent);
+		// attachments and message body
+		if(!this.attachments.isEmpty())
+		{
+			Multipart mp = new MimeMultipart();
+			MimeBodyPart part = new MimeBodyPart();
+			part.setText(this.baseContent);
+			// TODO: need to repair - in multipart message mimeContentType of baseContent was ignored
+			mp.addBodyPart(part);
+			for(Map.Entry<String,String> fn:this.attachments.entrySet())
+			{
+				part = new MimeBodyPart();
+				part.setFileName(fn.getKey());
+				FileDataSource fds = new FileDataSource(fn.getValue());
+				part.setDataHandler(new DataHandler(fds));
+				mp.addBodyPart(part);
+			}
+			message.setContent(mp);
 		} else
-		{ // for example utf8 html - mimeContentType="text/html; charset=utf-8"
-			message.setContent(this.baseContent,this.mimeContentType);
+		{
+			if(this.mimeContentType==null)
+			{ // simple text email body
+				message.setText(this.baseContent);
+			} else
+			{ // for example utf8 html - mimeContentType="text/html; charset=utf-8"
+				message.setContent(this.baseContent,this.mimeContentType);
+			}
 		}
-		// attachments
-		//MimeBodyPart part = new MimeBodyPart();
-		//part.setText();
+		//
+		//
 		//message.setContent(part);
 	}
 	

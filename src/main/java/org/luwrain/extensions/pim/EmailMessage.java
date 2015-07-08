@@ -32,4 +32,6 @@ public class EmailMessage
     public Date receivedDate = new Date();
     public String baseContent = "";
     public String mimeContentType = "";
+    // list filenames of file attachments, map's key - file name in email, value - full path to file on disk 
+    public HashMap<String,String> attachments=new HashMap<String, String>();
 }
