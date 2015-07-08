@@ -19,10 +19,13 @@ package org.luwrain.extensions.pim;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
 
 public interface EmailStoring extends Cloneable
 {
+	public void setOnlineMessageObject(Message message); // TODO: reorganise project structure to hide javamail usage inside
+
 	public void makeJavamailMessage() throws Exception;
 	public void readJavamailMessageBaseFields() throws Exception;
 	public void readJavamailMessageOnline() throws Exception;

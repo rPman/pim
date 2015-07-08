@@ -118,7 +118,10 @@ class StoredEmailMessageSql extends EmailMessage implements StoredEmailMessage, 
     	return -1 * receivedDate.compareTo(article.receivedDate);
     }
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	private Message message;
+	public Message message;
+	
+	public void setOnlineMessageObject(Message message){this.message=message;}
+	
 	// make MimeMessage from class fields
 	@Override public void makeJavamailMessage() throws Exception
 	{
