@@ -75,22 +75,28 @@ class EmailStoringSql extends EmailStoringRegistry
     
     @Override public void saveEmailMessage(EmailMessage message) throws SQLException
     {
-    	PreparedStatement st = con.prepareStatement("INSERT INTO email_message (id,message_id,subject,from,to,cc,bcc,is_readed,is_marked,sent_date,received_date,body,mime_body,raw) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-		st.setLong(1, 0); // FIXME: get id for new message in sql database
-		st.setString(2, message.messageId);
-		st.setString(3, message.subject);
-		st.setString(4, message.from);
-		st.setString(5, EmailStoringSql.SimpleArraySerialize(message.to));
-		st.setString(6, EmailStoringSql.SimpleArraySerialize(message.cc));
-		st.setString(7, EmailStoringSql.SimpleArraySerialize(message.bcc));
-		st.setBoolean(8, message.isReaded);
-		st.setBoolean(9, message.isMarked);
-		st.setDate(10, new java.sql.Date(message.sentDate.getTime()));
-		st.setDate(11, new java.sql.Date(message.receivedDate.getTime()));
-		st.setString(12, message.baseContent);
-		st.setString(13, message.mimeContentType);
-		st.setBytes(14, message.rawEmail);
-		st.executeUpdate();
+    	PreparedStatement st = con.prepareStatement("INSERT INTO email_message (id,message_id,subject,from,to,cc,bcc,is_readed,is_marked,sent_date,received_date,body,mime_body,raw) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+		st.setString(1, message.messageId);
+		st.setString(2, message.subject);
+		st.setString(3, message.from);
+		st.setString(4, EmailStoringSql.SimpleArraySerialize(message.to));
+		st.setString(5, EmailStoringSql.SimpleArraySerialize(message.cc));
+		st.setString(6, EmailStoringSql.SimpleArraySerialize(message.bcc));
+		st.setBoolean(7, message.isReaded);
+		st.setBoolean(8, message.isMarked);
+		st.setDate(9, new java.sql.Date(message.sentDate.getTime()));
+		st.setDate(10, new java.sql.Date(message.receivedDate.getTime()));
+		st.setString(11, message.baseContent);
+		st.setString(12, message.mimeContentType);
+		st.setBytes(13, message.rawEmail);
+		int updatedCount=st.executeUpdate();
+		/*
+		if(updatedCount==1)
+		{ // get generated id
+			ResultSet generatedKeys = st.getGeneratedKeys();
+			if (generatedKeys.next()) message.id = generatedKeys.getLong(1);
+		}
+		*/
     }
     
     @Override public StoredEmailMessage[] loadEmailMessages(boolean withRaw,Condition cond) throws SQLException
