@@ -17,7 +17,11 @@
 package org.luwrain.extensions.pim;
 
 import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
+
+import javax.mail.Message;
 
 public interface StoredEmailMessage
 {
@@ -48,5 +52,7 @@ public interface StoredEmailMessage
 	public void setBaseContent(String baseContent) throws Exception;
 	public String getMimeContentType() throws Exception;
 	public void setMimeContentType(String mimeContentType) throws Exception;
-    
+	
+	public byte[] getRawEmail() throws SQLException;
+	public void setRawEmail(byte[] rawEmail) throws SQLException;
 }

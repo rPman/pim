@@ -18,20 +18,25 @@ package org.luwrain.extensions.pim;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.sql.SQLException;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
 
+import org.luwrain.extensions.pim.EmailStoringSql.Condition;
+
 public interface EmailStoring extends Cloneable
 {
 	public void setOnlineMessageObject(Message message); // TODO: reorganise project structure to hide javamail usage inside
+	public void makeJavamailMessage(EmailMessage msg) throws Exception;
+	public void readJavamailMessageBaseFields(EmailMessage msg) throws Exception;
+	public void readJavamailMessageOnline(EmailMessage msg) throws Exception;
+	public void readJavamailMessageContent(EmailMessage msg) throws Exception;
+	public EmailMessage loadEmailFromFile(FileInputStream fs) throws Exception;
+	public void saveEmailToFile(EmailMessage msg,FileOutputStream fs) throws Exception;
+    void saveEmailMessage(EmailMessage message) throws Exception;
+	StoredEmailMessage[] loadEmailMessages(boolean withRaw, Condition cond) throws SQLException;
 
-	public void makeJavamailMessage() throws Exception;
-	public void readJavamailMessageBaseFields() throws Exception;
-	public void readJavamailMessageOnline() throws Exception;
-	public void loadEmailFromFile(FileInputStream fs) throws Exception;
-	public void saveEmailToFile(FileOutputStream fs) throws Exception;
-
-    //Object clone();
+	//Object clone();
     
 }
