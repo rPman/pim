@@ -39,7 +39,8 @@ public class EmailEssentialJavamail implements EmailEssential
 			int i=0;
 			InternetAddress[] addr_from=new InternetAddress[msg.from.length];  
 			for(String addr:msg.from) addr_from[i++]=new InternetAddress(addr);
-			jmailmsg.setFrom(new InternetAddress(msg.from[0])); // FIXME: 
+			// FIXME: make decision, new email message can have only one address FROM but received messages can have more
+			jmailmsg.setFrom(new InternetAddress(msg.from[0]));  
 		}
 		if(msg.to!=null&&msg.to.length>0)
 		{
