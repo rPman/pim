@@ -32,8 +32,8 @@ public interface StoredEmailMessage
 	public void setMessageId(String messageId) throws Exception;
 	public String getSubject() throws Exception;
 	public void setSubject(String subject) throws Exception;
-	public String getFrom() throws Exception;
-	public void setFrom(String from) throws Exception;
+	public String[] getFrom() throws Exception;
+	public void setFrom(String[] from) throws Exception;
 	public String[] getTo() throws Exception;
 	public void setTo(String[] to) throws Exception;
 	public String[] getCc() throws Exception;

@@ -65,11 +65,11 @@ class StoredEmailMessageSql extends EmailMessage implements StoredEmailMessage, 
     	st.executeUpdate();
     	this.subject = subject;
     }
-    @Override public String getFrom() {return from;}
-    @Override public void setFrom(String from) throws SQLException
+    @Override public String[] getFrom(){return from;}
+    @Override public void setFrom(String[] from) throws SQLException
 	{
 		PreparedStatement st = con.prepareStatement("UPDATE email_message SET from = ? WHERE id = ?;");
-		st.setString(1, from);
+		st.setString(1, EmailStoringSql.SimpleArraySerialize(from));
 		st.setLong(2, id);
 		st.executeUpdate();
 		this.from = from;

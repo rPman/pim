@@ -34,9 +34,12 @@ public class EmailEssentialJavamail implements EmailEssential
 	{
 		jmailmsg=new MimeMessage(session);
 		jmailmsg.setSubject(msg.subject);
-		if(msg.from!=null)
+		if(msg.from!=null&&msg.from.length>0)
 		{
-			jmailmsg.setFrom(new InternetAddress(msg.from));
+			int i=0;
+			InternetAddress[] addr_from=new InternetAddress[msg.from.length];  
+			for(String addr:msg.from) addr_from[i++]=new InternetAddress(addr);
+			jmailmsg.setFrom(new InternetAddress(msg.from[0])); // FIXME: 
 		}
 		if(msg.to!=null&&msg.to.length>0)
 		{
@@ -96,7 +99,9 @@ public class EmailEssentialJavamail implements EmailEssential
 		msg.subject=jmailmsg.getSubject();
 		if(jmailmsg.getFrom()!=null)
 		{
-			msg.from=jmailmsg.getFrom().toString();
+			Vector<String> from=new Vector<String>();
+			for(Address addr:jmailmsg.getFrom()) from.add(addr.toString());
+			msg.from=from.toArray(new String[from.size()]);
 		} else msg.from=null;
 		if(jmailmsg.getRecipients(RecipientType.TO)!=null)
 		{
@@ -132,7 +137,7 @@ public class EmailEssentialJavamail implements EmailEssential
 				file.getContentID();
 				file.getFileName();
 			}
-		}
+		} else
 		{
 			msg.baseContent=jmailmsg.getContent().toString();
 		}

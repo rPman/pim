@@ -62,7 +62,7 @@ class EmailStoringSql extends EmailStoringRegistry
     	PreparedStatement st = con.prepareStatement("INSERT INTO email_message (id,message_id,subject,from,to,cc,bcc,is_readed,is_marked,sent_date,received_date,body,mime_body,raw) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
 		st.setString(1, message.messageId);
 		st.setString(2, message.subject);
-		st.setString(3, message.from);
+		st.setString(3, EmailStoringSql.SimpleArraySerialize(message.from));
 		st.setString(4, EmailStoringSql.SimpleArraySerialize(message.to));
 		st.setString(5, EmailStoringSql.SimpleArraySerialize(message.cc));
 		st.setString(6, EmailStoringSql.SimpleArraySerialize(message.bcc));
@@ -97,7 +97,7 @@ class EmailStoringSql extends EmailStoringRegistry
     		message.id=rs.getLong(1);
     		message.messageId=rs.getString(2);
     		message.subject=rs.getString(3);
-    		message.from=rs.getString(4);
+    		message.from=EmailStoringSql.SimpleArrayDeSerialize(rs.getString(4));
     		message.to=EmailStoringSql.SimpleArrayDeSerialize(rs.getString(5));
     		message.cc=EmailStoringSql.SimpleArrayDeSerialize(rs.getString(6));
     		message.bcc=EmailStoringSql.SimpleArrayDeSerialize(rs.getString(7));

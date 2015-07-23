@@ -22,7 +22,7 @@ public class EmailMessage
 {
     public String messageId = "";
 	public String subject = "";
-    public String from = null;
+    public String[] from = null;
     public String[] to = null;
     public String[] cc = null;
     public String[] bcc = null;
